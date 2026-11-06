@@ -45,6 +45,12 @@
             margin-top: 28px;
             margin-bottom: 10px;
         }
+        h3 {
+            font-size: 1.05rem;
+            color: var(--accent);
+            margin-top: 18px;
+            margin-bottom: 6px;
+        }
         p, li {
             color: var(--text-muted);
             font-size: 0.98rem;
@@ -54,6 +60,24 @@
         }
         li {
             margin-bottom: 8px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 14px 0;
+            font-size: 0.92rem;
+        }
+        th, td {
+            text-align: left;
+            padding: 9px 10px;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-muted);
+            vertical-align: top;
+        }
+        th {
+            color: var(--accent);
+            font-weight: 600;
+            background-color: var(--bg-color);
         }
         .disclaimer-box {
             background-color: var(--warning-bg);
@@ -75,9 +99,15 @@
         strong {
             color: var(--text-main);
         }
+        a {
+            color: #0f766e;
+        }
         @media (max-width: 600px) {
             .container {
                 padding: 20px;
+            }
+            table {
+                font-size: 0.85rem;
             }
         }
     </style>
@@ -86,7 +116,7 @@
 <div class="container">
     <h1>Política de Privacidad y Condiciones de Uso de TurnoSync</h1>
     <div class="meta">
-        <strong>Última actualización:</strong> 5 de noviembre de 2026<br>
+        <strong>Última actualización:</strong> 6 de noviembre de 2026<br>
         <strong>Aplicación:</strong> TurnoSync (<code>com.vareladev.turnosync</code>)<br>
         <strong>Desarrollador / Marca:</strong> VarelaDev
     </div>
@@ -103,49 +133,165 @@
         <li><strong>Ubicación:</strong> A Coruña, España</li>
     </ul>
 
-    <h2>2. Principio de Almacenamiento 100% Local (Privacy by Design)</h2>
-    <p><strong>TurnoSync no dispone de servidores propios en la nube ni recopila datos personales de los usuarios en bases de datos externas.</strong></p>
-    <p>Toda la información que el usuario introduce en la aplicación —incluyendo cuadrantes de trabajo, turnos asignados, notas personales, registros horarios, vacaciones, permisos o configuraciones— se almacena <strong>única y exclusivamente en la memoria interna local del dispositivo del usuario</strong>.</p>
+    <h2>2. Arquitectura "Local-First": qué datos tratamos y dónde viven</h2>
+    <p>TurnoSync está diseñado bajo el principio de <strong>mínimos datos</strong>: todo tu contenido de trabajo vive en la memoria interna de tu dispositivo, y la nube solo interviene cuando TÚ activas funciones concretas (cuenta y copia de seguridad cifrada).</p>
+
+    <h3>2.1 Datos que NUNCA salen de tu dispositivo</h3>
+    <p>Los siguientes datos se almacenan exclusivamente en la base de datos local de la app y <strong>no se transmiten a VarelaDev ni a ningún tercero</strong>:</p>
     <ul>
-        <li>El desarrollador (VarelaDev) no tiene acceso técnico, remoto ni indirecto a los cuadrantes ni a la información laboral registrada por el usuario.</li>
-        <li>La aplicación no exige la creación de cuentas de usuario, ni solicita nombre, apellidos, número de identificación profesional (TIP/DNI), teléfono ni ubicación GPS.</li>
+        <li>Cuadrantes de trabajo, turnos, incidencias, festivos personalizados, plantillas y configuración de la aplicación.</li>
+        <li>La <strong>Libreta Táctica</strong> (notas, fichas de personas, vehículos y vínculos), que además se guarda <strong>cifrada con AES-256-GCM</strong> mediante una clave que solo existe en tu dispositivo.</li>
+        <li>El desbloqueo de la libreta se realiza con la autenticación local de tu móvil (huella, PIN o patrón del sistema); VarelaDev no recibe ni puede recuperar esas credenciales.</li>
     </ul>
 
-    <h2>3. Compras Integradas y Procesamiento de Pagos (Google Play Billing)</h2>
-    <p>TurnoSync se distribuye bajo un modelo gratuito con opción a desbloquear funciones avanzadas mediante compras integradas dentro de la aplicación (<em>In-App Purchases</em>).</p>
+    <h3>2.2 Cuenta de usuario — Firebase Authentication (Google)</h3>
+    <p>Solo si activas la copia de seguridad en la nube, la app te pedirá crear una cuenta:</p>
     <ul>
-        <li>Todas las transacciones financieras y verificaciones de licencias son gestionadas íntegramente por <strong>Google Play Store (Google Ireland Limited / Google LLC)</strong> a través de su API oficial <em>Google Play Billing</em>.</li>
-        <li><strong>VarelaDev nunca recibe, procesa ni almacena datos bancarios, números de tarjetas de crédito/débito ni credenciales de pago del usuario.</strong></li>
-        <li>Para poder verificar si el usuario ha adquirido la versión Pro y permitir la función de "Restaurar compras" al cambiar de teléfono, el SDK de Google Play Billing recopila identificadores técnicos de la transacción (como el token de compra o el estado de licencia vinculado a su cuenta de Google) conforme a la <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Política de Privacidad de Google</a>.</li>
+        <li><strong>Dato tratado:</strong> tu dirección de correo electrónico y una contraseña.</li>
+        <li>La autenticación la gestiona íntegramente <strong>Google Firebase Authentication</strong>; VarelaDev nunca recibe, ve ni almacena tu contraseña.</li>
+        <li><strong>Base jurídica:</strong> ejecución del servicio que solicitas (art. 6.1.b RGPD).</li>
     </ul>
 
-    <h2>4. Permisos del Dispositivo y Copias de Seguridad</h2>
-    <p>Para su correcto funcionamiento diario, TurnoSync puede solicitar o emplear los siguientes recursos locales del sistema operativo:</p>
+    <h3>2.3 Copia de seguridad en la nube — Firebase Storage</h3>
+    <p>Si utilizas "Respaldar en la nube" o "Restaurar desde la nube", se sube una copia de tus datos a tu espacio privado de Firebase Storage (<code>users/&lt;tu-id&gt;/backups/</code>):</p>
     <ul>
-        <li><strong>Notificaciones locales y alarmas:</strong> Utilizadas exclusivamente en el propio dispositivo para avisar al usuario del inicio de sus turnos o recordatorios configurados.</li>
-        <li><strong>Almacenamiento / Archivos (Exportación e Importación):</strong> Si el usuario decide exportar sus cuadrantes (por ejemplo, en formato PDF o archivo de respaldo) o importar una copia de seguridad, dicha acción es ejecutada manualmente por el usuario a través del selector de archivos del sistema operativo. El usuario es el único responsable de la custodia de los archivos exportados.</li>
-        <li><strong>Copia de seguridad automática del sistema:</strong> Si el usuario tiene activada la copia de seguridad nativa de su cuenta de Google (Android Auto Backup), los datos locales de la aplicación podrían respaldarse de forma cifrada en el espacio personal de Google Drive del propio usuario, bajo su exclusivo control.</li>
+        <li>La copia viaja <strong>cifrada de extremo a extremo</strong>: la clave se deriva de tu PIN de seguridad (PBKDF2-HMAC-SHA256, 210 000 iteraciones) y nunca sale del dispositivo en claro.</li>
+        <li><strong>Ni VarelaDev ni Google pueden leer el contenido de tu copia</strong> — es una garantía matemática, no una promesa.</li>
+        <li>Si olvidas tu PIN, la copia es irrecuperable incluso para nosotros.</li>
+        <li><strong>Base jurídica:</strong> ejecución del servicio solicitado (art. 6.1.b RGPD).</li>
     </ul>
 
-    <h2>5. Cesión de Datos a Terceros y Publicidad</h2>
+    <h3>2.4 Registro de consentimiento — Cloud Firestore</h3>
+    <p>Cuando aceptas los términos de uso se guarda en Cloud Firestore un registro con tu identificador de cuenta, la versión aceptada y la fecha. Su única finalidad es acreditar el consentimiento exigido por la normativa de protección de datos (interés legítimo, art. 6.1.f RGPD).</p>
+
+    <h3>2.5 Analítica de uso — solo con tu consentimiento (Firebase Analytics)</h3>
     <ul>
-        <li><strong>Cero venta de datos:</strong> VarelaDev no vende, alquila ni cede información alguna a terceros ni a agencias de publicidad.</li>
-        <li><strong>Sin rastreadores publicitarios:</strong> La aplicación no integra redes de anuncios de terceros que rastreen el comportamiento del usuario.</li>
+        <li>La recopilación de analítica arranca <strong>desactivada</strong> en la app y solo se activa cuando aceptas los términos vigentes. Puedes revocarla en cualquier momento desde Ajustes &rarr; Privacidad.</li>
+        <li>Cuando está activa, recoge eventos anónimos de uso (pantallas visitadas, opciones activadas) para mejorar la aplicación. No recoge el contenido de tus turnos ni de tus notas.</li>
+        <li><strong>Base jurídica:</strong> tu consentimiento (art. 6.1.a RGPD), revocable sin efectos retroactivos.</li>
     </ul>
 
-    <h2>6. Conservación y Eliminación de los Datos</h2>
-    <p>Dado que todos los datos de turnos se alojan localmente en el teléfono del usuario, el propio usuario tiene el control absoluto y directo sobre su conservación o borrado en cualquier momento:</p>
+    <h3>2.6 Diagnóstico de fallos — Firebase Crashlytics</h3>
     <ul>
-        <li>El usuario puede eliminar turnos o registros directamente desde la interfaz de TurnoSync.</li>
-        <li>Para borrar el 100% de los datos de forma irreversible, basta con ir a los <strong>Ajustes del teléfono &rarr; Aplicaciones &rarr; TurnoSync &rarr; Almacenamiento &rarr; Borrar datos</strong>, o bien <strong>desinstalar la aplicación</strong>.</li>
-        <li>Al no existir cuentas registradas en servidores de VarelaDev, no es necesario solicitar la baja de cuenta al desarrollador; no obstante, para cualquier duda sobre el historial de facturación, el usuario puede gestionar sus recibos directamente en su cuenta de Google Play.</li>
+        <li>Si la app falla, se envía un informe automático con datos técnicos: modelo de dispositivo, versión de Android, traza del error y metadatos de diagnóstico (por ejemplo, qué funciones estaban activas). Sirve para localizar y corregir errores.</li>
+        <li>Los informes <strong>no incluyen</strong> el contenido de tus turnos, de tus notas ni datos personales de terceros.</li>
+        <li><strong>Base jurídica:</strong> interés legítimo en mantener la estabilidad y seguridad de la aplicación (art. 6.1.f RGPD).</li>
     </ul>
 
-    <h2>7. Derechos del Usuario (ARCO-POL)</h2>
-    <p>El usuario puede ejercer sus derechos de acceso, rectificación, supresión, limitación, portabilidad y oposición, así como realizar cualquier consulta relativa a la privacidad o funcionamiento de la aplicación, enviando un correo electrónico a <strong>[TU_CORREO_DE_SOPORTE@DOMINIO.COM]</strong>. Asimismo, tiene derecho a presentar una reclamación ante la Agencia Española de Protección de Datos (AEPD - <a href="https://www.aepd.es" target="_blank" rel="noopener">www.aepd.es</a>) si considera que sus derechos han sido vulnerados.</p>
+    <h3>2.7 Datos de TERCEROS que tú introduces (aviso importante)</h3>
+    <p>La Libreta Táctica y la función de reconocimiento de matrículas pueden contener datos personales de otras personas (documentos de identidad, filiación, direcciones, matrículas u observaciones):</p>
+    <ul>
+        <li><strong>Tú eres el responsable del tratamiento</strong> de esos datos y de la licitud de su registro (deberes profesionales, interés legítimo o la base que corresponda en tu caso).</li>
+        <li>VarelaDev actúa únicamente como proveedor de la herramienta: <strong>no accede, no recibe ni procesa remotamente</strong> esos datos; permanecen cifrados en tu dispositivo y, si activas la copia en la nube, en tu backup cifrado de extremo a extremo.</li>
+        <li>El uso de documentos de identidad de terceros mediante NFC o de matrículas mediante la cámara debe ajustarse a la normativa que te sea aplicable en el ejercicio de tus funciones.</li>
+    </ul>
 
-    <h2>8. Limitación de Responsabilidad sobre el Uso de la Aplicación</h2>
-    <p>TurnoSync se proporciona "tal cual" (<em>as is</em>) como una herramienta auxiliar de cálculo y organización personal. Aunque el software ha sido diseñado con rigor técnico, los cálculos de horas nocturnas, festivas, índices correctores o descansos no sustituyen en ningún caso a los cuadrantes oficiales ni a las nóminas o certificaciones emitidas por la administración o empresa empleadora del usuario. VarelaDev no se hace responsable de errores humanos al introducir los turnos ni de posibles discrepancias interpretativas respecto a la normativa laboral o estatutaria vigente en cada momento.</p>
+    <h2>3. Permisos del dispositivo y su finalidad</h2>
+    <table>
+        <tr><th>Permiso</th><th>Para qué se usa</th><th>¿Sale del móvil?</th></tr>
+        <tr>
+            <td><strong>Calendario</strong> (leer y escribir)</td>
+            <td>Elegir el calendario destino y crear/borrar <strong>únicamente</strong> los eventos etiquetados por TurnoSync. No lee ni modifica tus eventos personales.</td>
+            <td>No</td>
+        </tr>
+        <tr>
+            <td><strong>Ubicación</strong> (precisa y aproximada)</td>
+            <td>Georreferenciar notas tácticas cuando tú lo solicitas.</td>
+            <td>No</td>
+        </tr>
+        <tr>
+            <td><strong>NFC</strong></td>
+            <td>Leer los datos del chip de un documento (DNIe) solo cuando pulsas el botón de lectura.</td>
+            <td>No</td>
+        </tr>
+        <tr>
+            <td><strong>Cámara</strong></td>
+            <td>Dashcam con reconocimiento de matrículas (ALPR): el procesamiento se hace <strong>en el propio dispositivo</strong>; no se suben imágenes ni vídeo.</td>
+            <td>No</td>
+        </tr>
+        <tr>
+            <td><strong>Notificaciones y alarmas exactas</strong></td>
+            <td>Avisos locales del inicio de los turnos que tú programas.</td>
+            <td>No</td>
+        </tr>
+        <tr>
+            <td><strong>Arranque del sistema</strong></td>
+            <td>Reprogramar tus alarmas tras reiniciar el móvil.</td>
+            <td>No</td>
+        </tr>
+        <tr>
+            <td><strong>Almacenamiento / selector de archivos</strong></td>
+            <td>Exportar cuadrantes a PDF y exportar/importar copias ZIP que tú eliges dónde guardar.</td>
+            <td>No</td>
+        </tr>
+        <tr>
+            <td><strong>Sincronización con reloj (Wear OS)</strong></td>
+            <td>Enviar tus próximos turnos al reloj emparejado.</td>
+            <td>No</td>
+        </tr>
+        <tr>
+            <td><strong>Internet</strong></td>
+            <td>Solo las funciones del punto 2 (cuenta, backup cifrado, analítica consentida, informes de fallos).</td>
+            <td>Sí (ver §2)</td>
+        </tr>
+    </table>
+    <p>Ningún permiso se usa en segundo plano para vigilancia ni se emplea fuera de la finalidad descrita.</p>
+
+    <h2>4. Compras integradas (si se habilitan)</h2>
+    <p>TurnoSync puede ofrecer funciones avanzadas desbloqueables mediante compras dentro de la aplicación (<em>In-App Purchases</em>):</p>
+    <ul>
+        <li>Los pagos se procesan íntegramente con <strong>Google Play Billing</strong> (Google Ireland Limited / Google LLC). <strong>VarelaDev nunca recibe, procesa ni almacena datos bancarios, números de tarjetas ni credenciales de pago del usuario.</strong></li>
+        <li>Para restaurar compras al cambiar de móvil, el SDK de Google conserva un token de compra vinculado a tu cuenta de Google, conforme a la <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Política de Privacidad de Google</a>.</li>
+    </ul>
+
+    <h2>5. Encargados del tratamiento y transferencias internacionales</h2>
+    <p>Los únicos terceros que tratan datos son los proveedores tecnológicos estrictamente necesarios:</p>
+    <ul>
+        <li><strong>Google Ireland Limited / Google LLC</strong> — Firebase (Authentication, Cloud Firestore, Storage, Analytics, Crashlytics, App Distribution para el programa de pruebas) y Google Play (distribución y facturación).</li>
+        <li>Estos servicios pueden implicar transferencia internacional de datos a EE. UU. Google cubre dichas transferencias mediante el <strong>Marco de Privacidad de Datos UE-EE. UU.</strong> y/o las cláusulas contractuales tipo de la Comisión Europea. Consulta las condiciones en <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">policies.google.com/privacy</a> y <a href="https://firebase.google.com/support/privacy" target="_blank" rel="noopener">firebase.google.com/support/privacy</a>.</li>
+    </ul>
+
+    <h2>6. Cesión de datos a terceros y publicidad</h2>
+    <ul>
+        <li><strong>Cero venta de datos:</strong> no vendemos, alquilamos ni cedemos información a terceros, agencias de publicidad ni data brokers.</li>
+        <li><strong>Sin rastreadores publicitarios:</strong> la aplicación no integra redes de anuncios.</li>
+        <li>Los únicos destinatarios son los encargados del punto 5, dentro de las finalidades descritas.</li>
+    </ul>
+
+    <h2>7. Conservación de los datos</h2>
+    <ul>
+        <li><strong>Datos locales:</strong> se conservan mientras mantengas la app instalada o hasta que los elimines.</li>
+        <li><strong>Cuenta y copia en la nube:</strong> hasta que elimines la cuenta o solicites su supresión.</li>
+        <li><strong>Informes de fallos (Crashlytics):</strong> según la retención propia de Firebase (hasta 90 días).</li>
+        <li><strong>Analítica:</strong> según la configuración de retención estándar de Firebase Analytics.</li>
+        <li><strong>Copia de seguridad automática del sistema:</strong> si tienes activada la copia nativa de tu cuenta de Google (Android Auto Backup), los datos locales pueden respaldarse cifrados en tu espacio personal de Google Drive, bajo tu exclusivo control.</li>
+    </ul>
+
+    <h2>8. Eliminación de tus datos</h2>
+    <ul>
+        <li><strong>Datos locales:</strong> se eliminan por completo borrando los datos de la app (<strong>Ajustes del teléfono &rarr; Aplicaciones &rarr; TurnoSync &rarr; Almacenamiento &rarr; Borrar datos</strong>) o desinstalándola.</li>
+        <li><strong>Cuenta y datos en la nube:</strong> puedes solicitar la eliminación completa de tu cuenta y de tus copias de seguridad desde la propia aplicación (<strong>Ajustes &rarr; Eliminar cuenta</strong>) o enviando un correo a <strong>[TU_CORREO_DE_SOPORTE@DOMINIO.COM]</strong> desde la dirección registrada. La eliminación incluye tu cuenta de Firebase Authentication, tus backups en Storage y tus registros de consentimiento, y se completa en un plazo máximo de 30 días.</li>
+        <li><strong>Copias exportadas por ti</strong> (PDF, ZIP, copia de seguridad de Android): quedan bajo tu exclusiva custodia y responsabilidad.</li>
+    </ul>
+
+    <h2>9. Derechos del Usuario (ARCO-POL)</h2>
+    <p>Puedes ejercer tus derechos de acceso, rectificación, supresión, limitación, portabilidad y oposición, así como realizar cualquier consulta relativa a la privacidad o funcionamiento de la aplicación, enviando un correo electrónico a <strong>[TU_CORREO_DE_SOPORTE@DOMINIO.COM]</strong>. Asimismo, tienes derecho a presentar una reclamación ante la Agencia Española de Protección de Datos (AEPD — <a href="https://www.aepd.es" target="_blank" rel="noopener">www.aepd.es</a>) si consideras que tus derechos han sido vulnerados.</p>
+
+    <h2>10. Menores de edad</h2>
+    <p>TurnoSync es una herramienta de gestión laboral dirigida a profesionales y <strong>no está dirigida a menores de 18 años</strong>. No recopilamos conscientemente datos de menores.</p>
+
+    <h2>11. Seguridad</h2>
+    <ul>
+        <li>Copia de seguridad cifrada de extremo a extremo (AES-256-GCM; clave derivada de tu PIN de seguridad).</li>
+        <li>Libreta Táctica cifrada en reposo con clave protegida por el hardware del dispositivo (Android Keystore).</li>
+        <li>Sin servidores propios: no existe ninguna base de datos de VarelaDev que contenga tus datos.</li>
+    </ul>
+
+    <h2>12. Limitación de Responsabilidad sobre el Uso de la Aplicación</h2>
+    <p>TurnoSync se proporciona "tal cual" (<em>as is</em>) como herramienta auxiliar de cálculo y organización personal. Aunque el software ha sido diseñado con rigor técnico, los cálculos de horas nocturnas, festivas, índices correctores o descansos no sustituyen en ningún caso a los cuadrantes oficiales ni a las nóminas o certificaciones emitidas por la administración o empresa empleadora del usuario. VarelaDev no se hace responsable de errores humanos al introducir los turnos ni de posibles discrepancias interpretativas respecto a la normativa laboral o estatutaria vigente en cada momento.</p>
+
+    <h2>13. Cambios a esta política</h2>
+    <p>Cualquier cambio relevante se publicará en esta misma página antes de entrar en vigor y, cuando la naturaleza del cambio lo requiera, se te pedirá de nuevo el consentimiento dentro de la aplicación.</p>
 </div>
 </body>
 </html>
